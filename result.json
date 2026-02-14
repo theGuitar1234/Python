@@ -1,0 +1,1298 @@
+[{
+    "_id": {
+        "$oid": "694e53282ec031d266a59dc3"
+    },
+    "name": "UCSF",
+    "address": "505 Parnassus Ave"
+},
+{
+    "_id": {
+        "$oid": "694e533132b8969d9d58f53b"
+    },
+    "name": "UCSF",
+    "address": "505 Parnassus Ave"
+},
+{
+    "_id": {
+        "$oid": "694e5349783de9fe052d7964"
+    },
+    "name": "UCSF",
+    "address": "505 Parnassus Ave"
+},
+{
+    "_id": {
+        "$oid": "694e53737c001780162671b3"
+    },
+    "name": "UCSF",
+    "address": "505 Parnassus Ave"
+},
+{
+    "_id": {
+        "$oid": "694e53e00ee01a788b29cffc"
+    },
+    "name": "UCSF",
+    "address": "505 Parnassus Ave"
+},
+{
+    "_id": {
+        "$oid": "694e53f5a6b716470e74ea88"
+    },
+    "name": "UCSF",
+    "address": "505 Parnassus Ave"
+},
+{
+    "_id": {
+        "$oid": "694e5400e1e0903f9ac7f1ed"
+    },
+    "name": "UCSF",
+    "address": "505 Parnassus Ave"
+},
+{
+    "_id": {
+        "$oid": "694e5411af5adcb83ac333b6"
+    },
+    "name": "UCSF",
+    "address": "505 Parnassus Ave"
+},
+{
+    "_id": {
+        "$oid": "694e541a856eba7cfc03711d"
+    },
+    "name": "UCSF",
+    "address": "505 Parnassus Ave"
+},
+{
+    "_id": {
+        "$oid": "694e5425804a83399b431c68"
+    },
+    "name": "UCSF",
+    "address": "505 Parnassus Ave"
+},
+{
+    "_id": {
+        "$oid": "694e542d5ecdcb8ea627aab9"
+    },
+    "name": "UCSF",
+    "address": "505 Parnassus Ave"
+},
+{
+    "_id": {
+        "$oid": "694e57b056d425bae2dd2614"
+    },
+    "j_schools": [
+        {
+            "name": "Holberton school",
+            "topics": [
+                "Algo",
+                "C",
+                "Python",
+                "React"
+            ]
+        },
+        {
+            "name": "UCSF",
+            "topics": [
+                "Algo",
+                "MongoDB"
+            ]
+        },
+        {
+            "name": "UCLA",
+            "topics": [
+                "C",
+                "Python"
+            ]
+        },
+        {
+            "name": "UCSD",
+            "topics": [
+                "Cassandra"
+            ]
+        },
+        {
+            "name": "Stanford",
+            "topics": [
+                "C",
+                "React",
+                "Javascript"
+            ]
+        }
+    ]
+},
+{
+    "_id": {
+        "$oid": "694e580639aca9ac7e35e489"
+    },
+    "j_schools": [
+        {
+            "name": "Holberton school",
+            "topics": [
+                "Algo",
+                "C",
+                "Python",
+                "React"
+            ]
+        },
+        {
+            "name": "UCSF",
+            "topics": [
+                "Algo",
+                "MongoDB"
+            ]
+        },
+        {
+            "name": "UCLA",
+            "topics": [
+                "C",
+                "Python"
+            ]
+        },
+        {
+            "name": "UCSD",
+            "topics": [
+                "Cassandra"
+            ]
+        },
+        {
+            "name": "Stanford",
+            "topics": [
+                "C",
+                "React",
+                "Javascript"
+            ]
+        }
+    ]
+},
+{
+    "_id": {
+        "$oid": "694e585b0c6c53fa8f48a851"
+    },
+    "j_schools": [
+        {
+            "name": "Holberton school",
+            "topics": [
+                "Algo",
+                "C",
+                "Python",
+                "React"
+            ]
+        },
+        {
+            "name": "UCSF",
+            "topics": [
+                "Algo",
+                "MongoDB"
+            ]
+        },
+        {
+            "name": "UCLA",
+            "topics": [
+                "C",
+                "Python"
+            ]
+        },
+        {
+            "name": "UCSD",
+            "topics": [
+                "Cassandra"
+            ]
+        },
+        {
+            "name": "Stanford",
+            "topics": [
+                "C",
+                "React",
+                "Javascript"
+            ]
+        }
+    ]
+},
+{
+    "_id": {
+        "$oid": "694e586d013cb3ff37952200"
+    },
+    "j_schools": [
+        {
+            "name": "Holberton school",
+            "topics": [
+                "Algo",
+                "C",
+                "Python",
+                "React"
+            ]
+        },
+        {
+            "name": "UCSF",
+            "topics": [
+                "Algo",
+                "MongoDB"
+            ]
+        },
+        {
+            "name": "UCLA",
+            "topics": [
+                "C",
+                "Python"
+            ]
+        },
+        {
+            "name": "UCSD",
+            "topics": [
+                "Cassandra"
+            ]
+        },
+        {
+            "name": "Stanford",
+            "topics": [
+                "C",
+                "React",
+                "Javascript"
+            ]
+        }
+    ]
+},
+{
+    "_id": {
+        "$oid": "694e588d7ec2119163d5ce14"
+    },
+    "j_schools": [
+        {
+            "name": "Holberton school",
+            "topics": [
+                "Algo",
+                "C",
+                "Python",
+                "React"
+            ]
+        },
+        {
+            "name": "UCSF",
+            "topics": [
+                "Algo",
+                "MongoDB"
+            ]
+        },
+        {
+            "name": "UCLA",
+            "topics": [
+                "C",
+                "Python"
+            ]
+        },
+        {
+            "name": "UCSD",
+            "topics": [
+                "Cassandra"
+            ]
+        },
+        {
+            "name": "Stanford",
+            "topics": [
+                "C",
+                "React",
+                "Javascript"
+            ]
+        }
+    ]
+},
+{
+    "_id": {
+        "$oid": "694e58978fcc6d451d646fb5"
+    },
+    "j_schools": [
+        {
+            "name": "Holberton school",
+            "topics": [
+                "Algo",
+                "C",
+                "Python",
+                "React"
+            ]
+        },
+        {
+            "name": "UCSF",
+            "topics": [
+                "Algo",
+                "MongoDB"
+            ]
+        },
+        {
+            "name": "UCLA",
+            "topics": [
+                "C",
+                "Python"
+            ]
+        },
+        {
+            "name": "UCSD",
+            "topics": [
+                "Cassandra"
+            ]
+        },
+        {
+            "name": "Stanford",
+            "topics": [
+                "C",
+                "React",
+                "Javascript"
+            ]
+        }
+    ]
+},
+{
+    "_id": {
+        "$oid": "694e58bcef0f134210cdc38e"
+    },
+    "j_schools": [
+        {
+            "name": "Holberton school",
+            "topics": [
+                "Algo",
+                "C",
+                "Python",
+                "React"
+            ]
+        },
+        {
+            "name": "UCSF",
+            "topics": [
+                "Algo",
+                "MongoDB"
+            ]
+        },
+        {
+            "name": "UCLA",
+            "topics": [
+                "C",
+                "Python"
+            ]
+        },
+        {
+            "name": "UCSD",
+            "topics": [
+                "Cassandra"
+            ]
+        },
+        {
+            "name": "Stanford",
+            "topics": [
+                "C",
+                "React",
+                "Javascript"
+            ]
+        }
+    ]
+},
+{
+    "_id": {
+        "$oid": "694e58d7458cf33a68ed107c"
+    },
+    "j_schools": [
+        {
+            "name": "Holberton school",
+            "topics": [
+                "Algo",
+                "C",
+                "Python",
+                "React"
+            ]
+        },
+        {
+            "name": "UCSF",
+            "topics": [
+                "Algo",
+                "MongoDB"
+            ]
+        },
+        {
+            "name": "UCLA",
+            "topics": [
+                "C",
+                "Python"
+            ]
+        },
+        {
+            "name": "UCSD",
+            "topics": [
+                "Cassandra"
+            ]
+        },
+        {
+            "name": "Stanford",
+            "topics": [
+                "C",
+                "React",
+                "Javascript"
+            ]
+        }
+    ]
+},
+{
+    "_id": {
+        "$oid": "694e58edcc0265805368809a"
+    },
+    "j_schools": [
+        {
+            "name": "Holberton school",
+            "topics": [
+                "Algo",
+                "C",
+                "Python",
+                "React"
+            ]
+        },
+        {
+            "name": "UCSF",
+            "topics": [
+                "Algo",
+                "MongoDB"
+            ]
+        },
+        {
+            "name": "UCLA",
+            "topics": [
+                "C",
+                "Python"
+            ]
+        },
+        {
+            "name": "UCSD",
+            "topics": [
+                "Cassandra"
+            ]
+        },
+        {
+            "name": "Stanford",
+            "topics": [
+                "C",
+                "React",
+                "Javascript"
+            ]
+        }
+    ]
+},
+{
+    "_id": {
+        "$oid": "694e5979fefe96a53611b3de"
+    },
+    "j_schools": [
+        {
+            "name": "Holberton school",
+            "topics": [
+                "Algo",
+                "C",
+                "Python",
+                "React"
+            ]
+        },
+        {
+            "name": "UCSF",
+            "topics": [
+                "Algo",
+                "MongoDB"
+            ]
+        },
+        {
+            "name": "UCLA",
+            "topics": [
+                "C",
+                "Python"
+            ]
+        },
+        {
+            "name": "UCSD",
+            "topics": [
+                "Cassandra"
+            ]
+        },
+        {
+            "name": "Stanford",
+            "topics": [
+                "C",
+                "React",
+                "Javascript"
+            ]
+        }
+    ]
+},
+{
+    "_id": {
+        "$oid": "694e598198f15091c8220709"
+    },
+    "j_schools": [
+        {
+            "name": "Holberton school",
+            "topics": [
+                "Algo",
+                "C",
+                "Python",
+                "React"
+            ]
+        },
+        {
+            "name": "UCSF",
+            "topics": [
+                "Algo",
+                "MongoDB"
+            ]
+        },
+        {
+            "name": "UCLA",
+            "topics": [
+                "C",
+                "Python"
+            ]
+        },
+        {
+            "name": "UCSD",
+            "topics": [
+                "Cassandra"
+            ]
+        },
+        {
+            "name": "Stanford",
+            "topics": [
+                "C",
+                "React",
+                "Javascript"
+            ]
+        }
+    ]
+},
+{
+    "_id": {
+        "$oid": "694e599f2fa07d82365bd3a9"
+    },
+    "j_schools": [
+        {
+            "name": "Holberton school",
+            "topics": [
+                "Algo",
+                "C",
+                "Python",
+                "React"
+            ]
+        },
+        {
+            "name": "UCSF",
+            "topics": [
+                "Algo",
+                "MongoDB"
+            ]
+        },
+        {
+            "name": "UCLA",
+            "topics": [
+                "C",
+                "Python"
+            ]
+        },
+        {
+            "name": "UCSD",
+            "topics": [
+                "Cassandra"
+            ]
+        },
+        {
+            "name": "Stanford",
+            "topics": [
+                "C",
+                "React",
+                "Javascript"
+            ]
+        }
+    ]
+},
+{
+    "_id": {
+        "$oid": "694e59ccb5c10234960faae2"
+    },
+    "j_schools": [
+        {
+            "name": "Holberton school",
+            "topics": [
+                "Algo",
+                "C",
+                "Python",
+                "React"
+            ]
+        },
+        {
+            "name": "UCSF",
+            "topics": [
+                "Algo",
+                "MongoDB"
+            ]
+        },
+        {
+            "name": "UCLA",
+            "topics": [
+                "C",
+                "Python"
+            ]
+        },
+        {
+            "name": "UCSD",
+            "topics": [
+                "Cassandra"
+            ]
+        },
+        {
+            "name": "Stanford",
+            "topics": [
+                "C",
+                "React",
+                "Javascript"
+            ]
+        }
+    ]
+},
+{
+    "_id": {
+        "$oid": "694e59da52c4d937fc87565a"
+    },
+    "j_schools": [
+        {
+            "name": "Holberton school",
+            "topics": [
+                "Algo",
+                "C",
+                "Python",
+                "React"
+            ]
+        },
+        {
+            "name": "UCSF",
+            "topics": [
+                "Algo",
+                "MongoDB"
+            ]
+        },
+        {
+            "name": "UCLA",
+            "topics": [
+                "C",
+                "Python"
+            ]
+        },
+        {
+            "name": "UCSD",
+            "topics": [
+                "Cassandra"
+            ]
+        },
+        {
+            "name": "Stanford",
+            "topics": [
+                "C",
+                "React",
+                "Javascript"
+            ]
+        }
+    ]
+},
+{
+    "_id": {
+        "$oid": "694e5a08f2f9c71ddd2255f2"
+    },
+    "j_schools": [
+        {
+            "name": "Holberton school",
+            "topics": [
+                "Algo",
+                "C",
+                "Python",
+                "React"
+            ]
+        },
+        {
+            "name": "UCSF",
+            "topics": [
+                "Algo",
+                "MongoDB"
+            ]
+        },
+        {
+            "name": "UCLA",
+            "topics": [
+                "C",
+                "Python"
+            ]
+        },
+        {
+            "name": "UCSD",
+            "topics": [
+                "Cassandra"
+            ]
+        },
+        {
+            "name": "Stanford",
+            "topics": [
+                "C",
+                "React",
+                "Javascript"
+            ]
+        }
+    ]
+},
+{
+    "_id": {
+        "$oid": "694e5aa72e95ceb340fe27b3"
+    },
+    "j_schools": [
+        {
+            "name": "Holberton school",
+            "topics": [
+                "Algo",
+                "C",
+                "Python",
+                "React"
+            ]
+        },
+        {
+            "name": "UCSF",
+            "topics": [
+                "Algo",
+                "MongoDB"
+            ]
+        },
+        {
+            "name": "UCLA",
+            "topics": [
+                "C",
+                "Python"
+            ]
+        },
+        {
+            "name": "UCSD",
+            "topics": [
+                "Cassandra"
+            ]
+        },
+        {
+            "name": "Stanford",
+            "topics": [
+                "C",
+                "React",
+                "Javascript"
+            ]
+        }
+    ]
+},
+{
+    "_id": {
+        "$oid": "694e5ae0e6f1be81465483ac"
+    },
+    "j_schools": [
+        {
+            "name": "Holberton school",
+            "topics": [
+                "Algo",
+                "C",
+                "Python",
+                "React"
+            ]
+        },
+        {
+            "name": "UCSF",
+            "topics": [
+                "Algo",
+                "MongoDB"
+            ]
+        },
+        {
+            "name": "UCLA",
+            "topics": [
+                "C",
+                "Python"
+            ]
+        },
+        {
+            "name": "UCSD",
+            "topics": [
+                "Cassandra"
+            ]
+        },
+        {
+            "name": "Stanford",
+            "topics": [
+                "C",
+                "React",
+                "Javascript"
+            ]
+        }
+    ]
+},
+{
+    "_id": {
+        "$oid": "694e5aeb5a02dd9d23ae3a9b"
+    },
+    "j_schools": [
+        {
+            "name": "Holberton school",
+            "topics": [
+                "Algo",
+                "C",
+                "Python",
+                "React"
+            ]
+        },
+        {
+            "name": "UCSF",
+            "topics": [
+                "Algo",
+                "MongoDB"
+            ]
+        },
+        {
+            "name": "UCLA",
+            "topics": [
+                "C",
+                "Python"
+            ]
+        },
+        {
+            "name": "UCSD",
+            "topics": [
+                "Cassandra"
+            ]
+        },
+        {
+            "name": "Stanford",
+            "topics": [
+                "C",
+                "React",
+                "Javascript"
+            ]
+        }
+    ]
+},
+{
+    "_id": {
+        "$oid": "694e5b1b85aa8f813d415758"
+    },
+    "j_schools": [
+        {
+            "name": "Holberton school",
+            "topics": [
+                "Algo",
+                "C",
+                "Python",
+                "React"
+            ]
+        },
+        {
+            "name": "UCSF",
+            "topics": [
+                "Algo",
+                "MongoDB"
+            ]
+        },
+        {
+            "name": "UCLA",
+            "topics": [
+                "C",
+                "Python"
+            ]
+        },
+        {
+            "name": "UCSD",
+            "topics": [
+                "Cassandra"
+            ]
+        },
+        {
+            "name": "Stanford",
+            "topics": [
+                "C",
+                "React",
+                "Javascript"
+            ]
+        }
+    ]
+},
+{
+    "_id": {
+        "$oid": "694e5b2a5dea6a013acd6225"
+    },
+    "j_schools": [
+        {
+            "name": "Holberton school",
+            "topics": [
+                "Algo",
+                "C",
+                "Python",
+                "React"
+            ]
+        },
+        {
+            "name": "UCSF",
+            "topics": [
+                "Algo",
+                "MongoDB"
+            ]
+        },
+        {
+            "name": "UCLA",
+            "topics": [
+                "C",
+                "Python"
+            ]
+        },
+        {
+            "name": "UCSD",
+            "topics": [
+                "Cassandra"
+            ]
+        },
+        {
+            "name": "Stanford",
+            "topics": [
+                "C",
+                "React",
+                "Javascript"
+            ]
+        }
+    ]
+},
+{
+    "_id": {
+        "$oid": "694e5b64757dc08c09b3b0d2"
+    },
+    "j_schools": [
+        {
+            "name": "Holberton school",
+            "topics": [
+                "Algo",
+                "C",
+                "Python",
+                "React"
+            ]
+        },
+        {
+            "name": "UCSF",
+            "topics": [
+                "Algo",
+                "MongoDB"
+            ]
+        },
+        {
+            "name": "UCLA",
+            "topics": [
+                "C",
+                "Python"
+            ]
+        },
+        {
+            "name": "UCSD",
+            "topics": [
+                "Cassandra"
+            ]
+        },
+        {
+            "name": "Stanford",
+            "topics": [
+                "C",
+                "React",
+                "Javascript"
+            ]
+        }
+    ]
+},
+{
+    "_id": {
+        "$oid": "694e5b6be528ca3638476bbd"
+    },
+    "j_schools": [
+        {
+            "name": "Holberton school",
+            "topics": [
+                "Algo",
+                "C",
+                "Python",
+                "React"
+            ]
+        },
+        {
+            "name": "UCSF",
+            "topics": [
+                "Algo",
+                "MongoDB"
+            ]
+        },
+        {
+            "name": "UCLA",
+            "topics": [
+                "C",
+                "Python"
+            ]
+        },
+        {
+            "name": "UCSD",
+            "topics": [
+                "Cassandra"
+            ]
+        },
+        {
+            "name": "Stanford",
+            "topics": [
+                "C",
+                "React",
+                "Javascript"
+            ]
+        }
+    ]
+},
+{
+    "_id": {
+        "$oid": "694e5baad3f2651cba0612bd"
+    },
+    "j_schools": [
+        {
+            "name": "Holberton school",
+            "topics": [
+                "Algo",
+                "C",
+                "Python",
+                "React"
+            ]
+        },
+        {
+            "name": "UCSF",
+            "topics": [
+                "Algo",
+                "MongoDB"
+            ]
+        },
+        {
+            "name": "UCLA",
+            "topics": [
+                "C",
+                "Python"
+            ]
+        },
+        {
+            "name": "UCSD",
+            "topics": [
+                "Cassandra"
+            ]
+        },
+        {
+            "name": "Stanford",
+            "topics": [
+                "C",
+                "React",
+                "Javascript"
+            ]
+        }
+    ]
+},
+{
+    "_id": {
+        "$oid": "694e5bc3635b8d9c9fcc37a0"
+    },
+    "j_schools": [
+        {
+            "name": "Holberton school",
+            "topics": [
+                "Algo",
+                "C",
+                "Python",
+                "React"
+            ]
+        },
+        {
+            "name": "UCSF",
+            "topics": [
+                "Algo",
+                "MongoDB"
+            ]
+        },
+        {
+            "name": "UCLA",
+            "topics": [
+                "C",
+                "Python"
+            ]
+        },
+        {
+            "name": "UCSD",
+            "topics": [
+                "Cassandra"
+            ]
+        },
+        {
+            "name": "Stanford",
+            "topics": [
+                "C",
+                "React",
+                "Javascript"
+            ]
+        }
+    ]
+},
+{
+    "_id": {
+        "$oid": "694e5bd9cb9e514d8ba636e8"
+    },
+    "j_schools": [
+        {
+            "name": "Holberton school",
+            "topics": [
+                "Algo",
+                "C",
+                "Python",
+                "React"
+            ]
+        },
+        {
+            "name": "UCSF",
+            "topics": [
+                "Algo",
+                "MongoDB"
+            ]
+        },
+        {
+            "name": "UCLA",
+            "topics": [
+                "C",
+                "Python"
+            ]
+        },
+        {
+            "name": "UCSD",
+            "topics": [
+                "Cassandra"
+            ]
+        },
+        {
+            "name": "Stanford",
+            "topics": [
+                "C",
+                "React",
+                "Javascript"
+            ]
+        }
+    ]
+},
+{
+    "_id": {
+        "$oid": "694e5be37d676c5e9a369da5"
+    },
+    "j_schools": [
+        {
+            "name": "Holberton school",
+            "topics": [
+                "Algo",
+                "C",
+                "Python",
+                "React"
+            ]
+        },
+        {
+            "name": "UCSF",
+            "topics": [
+                "Algo",
+                "MongoDB"
+            ]
+        },
+        {
+            "name": "UCLA",
+            "topics": [
+                "C",
+                "Python"
+            ]
+        },
+        {
+            "name": "UCSD",
+            "topics": [
+                "Cassandra"
+            ]
+        },
+        {
+            "name": "Stanford",
+            "topics": [
+                "C",
+                "React",
+                "Javascript"
+            ]
+        }
+    ]
+},
+{
+    "_id": {
+        "$oid": "694e5d198608d5b696e8f2b6"
+    },
+    "key": "Holberton school"
+},
+{
+    "_id": {
+        "$oid": "694e5d198608d5b696e8f2b7"
+    },
+    "key": [
+        "Algo",
+        "C",
+        "Python",
+        "React"
+    ]
+},
+{
+    "_id": {
+        "$oid": "694e5d198608d5b696e8f2b8"
+    },
+    "key": "UCSF"
+},
+{
+    "_id": {
+        "$oid": "694e5d198608d5b696e8f2b9"
+    },
+    "key": [
+        "Algo",
+        "MongoDB"
+    ]
+},
+{
+    "_id": {
+        "$oid": "694e5d198608d5b696e8f2ba"
+    },
+    "key": "UCLA"
+},
+{
+    "_id": {
+        "$oid": "694e5d198608d5b696e8f2bb"
+    },
+    "key": [
+        "C",
+        "Python"
+    ]
+},
+{
+    "_id": {
+        "$oid": "694e5d198608d5b696e8f2bc"
+    },
+    "key": "UCSD"
+},
+{
+    "_id": {
+        "$oid": "694e5d198608d5b696e8f2bd"
+    },
+    "key": [
+        "Cassandra"
+    ]
+},
+{
+    "_id": {
+        "$oid": "694e5d198608d5b696e8f2be"
+    },
+    "key": "Stanford"
+},
+{
+    "_id": {
+        "$oid": "694e5d198608d5b696e8f2bf"
+    },
+    "key": [
+        "C",
+        "React",
+        "Javascript"
+    ]
+}]

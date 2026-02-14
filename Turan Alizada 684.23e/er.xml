@@ -1,0 +1,10 @@
+<library>
+    <book>
+        <title>XML Fundamentals</title>
+        <author>John Doe</author>
+    </book>
+    <book>
+        <title>Advanced XML</title>
+        <author>Jane Smith</author>
+    </book>
+</library>
