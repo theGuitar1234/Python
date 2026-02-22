@@ -29,6 +29,8 @@ def gradient_descent(y, X, learning_rate, epochs):
         w -= learning_rate*grad_w
         b -= learning_rate*grad_b
     
+    print(w, b)
+    
     return (w, b)
 
 def predict(input, tuple):
