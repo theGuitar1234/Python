@@ -47,3 +47,11 @@ true_labels = [random.randint(0, 1) for _ in range(10)]
 predictions = [random.randint(0, 1) for _ in range(10)]
 
 print(error_analysis(confusion_matrix(true_labels, predictions)))
+# True Positives: 2
+# True Negatives: 1
+# False Positives: 3
+# False Negatives: 4
+# Accuracy: 0.3
+# Percision: 0.4
+# Recall: 0.3333333333333333
+# F1_score: 0.3636363636363636

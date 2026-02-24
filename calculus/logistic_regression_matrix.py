@@ -30,11 +30,21 @@ def gradient_descent(y, X, learning_rate, epochs):
         for j in range(len(X[0])):
             w[j] -= learning_rate * grad_w[j]
         b -= learning_rate * grad_b
+
+    return (w, b)
     
-    return f"""
-        Predicted weight: {w}
-        Predicted bias: {b}
-    """
+    # return f"""
+    #     Predicted weight: {w}
+    #     Predicted bias: {b}
+    # """
+
+def sigmoid(z):
+    if z >= 0:
+        ez = math.exp(-z)
+        return 1.0 / (1.0 + ez)
+    else:
+        ez = math.exp(z)
+        return ez / (1.0 + ez)
 
 def dot_product(a, b):
     total = 0.0
@@ -49,6 +59,15 @@ def transpoze(mat):
             result[i][j] = mat[j][i]
     return result
 
+def predict(input, tuple):
+    w = tuple[0]
+    b = tuple[1]
+    
+    return sigmoid(input*w + b)
+
+def linear_model(w, x, b):
+    return dot_product(w, x)+b
+
 X = [
     [1, 5],
     [2, 10],
@@ -58,6 +77,7 @@ X = [
 
 y = [0, 0, 1, 1]
 
-print(gradient_descent(y, X, 0.0001, 50000))
-# Predicted weight: [0.021005091660459385, 0.105025458302298]
-# Predicted bias: -0.8787072565494798
+if __name__ == "__main__":
+    print(gradient_descent(y, X, 0.0001, 50000))
+    # Predicted weight: [0.021005091660459385, 0.105025458302298]
+    # Predicted bias: -0.8787072565494798

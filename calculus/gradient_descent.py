@@ -37,7 +37,7 @@ import random
 
 for i in range(5):
     h = random.randint(0, 10)
-    print(f"Hours studied: {h}", predict(h, y, X, 0.01, 50000))
+    print(f"Hours studied: {h}", predict(h, y, X, 0.001, 50000))
 # Hours studied: 9 The student will pass
 # Hours studied: 99 The student will pass
 # Hours studied: 94 The student will pass

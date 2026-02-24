@@ -64,13 +64,13 @@ import random
 X = [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9, 10]
 y = [0,   0,  0,   0, 0,   0, 1,   0, 1,   0,  1,   1,  1,   1,  1,   1,  1,   1,  1,  1]
 
-tuple = gradient_descent(y, X, 0.01, 50000)
-
-for i in range(5):
-    h = random.randint(0, 10)
-    print(f"Hours studied: {h}", predict(h, tuple))
-# Hours studied: 9 0.9995276597013458
-# Hours studied: 4 0.5929301794798776
-# Hours studied: 5 0.862040397364535
-# Hours studied: 4 0.5929301794798776
-# Hours studied: 1 0.0181163858897732
+if __name__ == "__main__":
+    tuple = gradient_descent(y, X, 0.01, 50000)
+    for i in range(5):
+        h = random.randint(0, 10)
+        print(f"Hours studied: {h}", predict(h, tuple))
+        # Hours studied: 9 0.9995276597013458
+        # Hours studied: 4 0.5929301794798776
+        # Hours studied: 5 0.862040397364535
+        # Hours studied: 4 0.5929301794798776
+        # Hours studied: 1 0.0181163858897732

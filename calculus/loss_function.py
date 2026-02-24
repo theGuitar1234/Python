@@ -31,7 +31,8 @@ def linear_model(w, x, b):
 print(gradient_descent(6, 3, 0.1))
 
 w = 6.00877193
-b = 44.166666666666664
-# print(loss(train_data, input, w, b))
+b = 45.166666666666664
+
+print(loss(train_data, input, w, b))
 # For the weight 6.00877193 and bias 44.166666666666664,
 # the accuracy of the linear model is: 5.629039701908306
