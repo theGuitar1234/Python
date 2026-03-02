@@ -1,5 +1,5 @@
 import math
-import logistic_regression_matrix as lmr
+import calculus.logistic_regression_matrixDONE as lmr
 
 def soft_max(Z):   
     e = 2.7182818459
@@ -14,17 +14,17 @@ def soft_max(Z):
 def cross_entropy_average(sum, input):
     return -1/len(input) * sum
 
-# def multiclass_cross_entropy(y, X, W, b):
-#     total = 0.0
-#     eps = 1e-12
-#     N = len(X)
+def multiclass_cross_entropy(y, X, W, b):
+    total = 0.0
+    eps = 1e-12
+    N = len(X)
 
-#     for i in range(N):
-#         logits = logits_multiclass(W, X[i], b)
-#         p = soft_max(logits)
-#         total += sum(y[i][k] * math.log(p[k] + eps) for k in range(len(p)))
+    for i in range(N):
+        logits = logits_multiclass(W, X[i], b)
+        p = soft_max(logits)
+        total += sum(y[i][k] * math.log(p[k] + eps) for k in range(len(p)))
 
-#     return -total / N
+    return -total / N
 
 def cross_entropy_index(y, X, W, b, eps=1e-12):
     total = 0.0

@@ -15,7 +15,7 @@ def gradient_descent(y, X, learning_rate, epochs):
     
     return (w, b)
 
-def predict(input, y, X, learning_rate, epochs):
+def predict_raw(input, y, X, learning_rate, epochs):
     tuple = gradient_descent(y, X, learning_rate, epochs)
     w = tuple[0]
     b = tuple[1]
@@ -37,7 +37,7 @@ import random
 
 for i in range(5):
     h = random.randint(0, 10)
-    print(f"Hours studied: {h}", predict(h, y, X, 0.001, 50000))
+    print(f"Hours studied: {h}", predict_raw(h, y, X, 0.001, 50000))
 # Hours studied: 9 The student will pass
 # Hours studied: 99 The student will pass
 # Hours studied: 94 The student will pass

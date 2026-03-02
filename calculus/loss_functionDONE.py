@@ -8,7 +8,7 @@ input = [
 ]
 
 def gradient_descent(train_data, input, learning_rate):
-    w = 5
+    w = 1000
 
     for _ in range(1000):
         grad = 2*(w*input - train_data) * input

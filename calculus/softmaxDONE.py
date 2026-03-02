@@ -1,9 +1,10 @@
-import logistic_regression_matrix as lrm
+import calculus.logistic_regression_matrixDONE as lrm
 
 def train_one_vs_rest(X, y_multiclass, K, learning_rate, epochs, lrm):
     params = []
     for c in range(K):
         y_binary = [1 if yi == c else 0 for yi in y_multiclass]
+        print(y_binary)
         w, b = lrm.gradient_descent(y_binary, X, learning_rate, epochs)
         params.append((w, b))
     return params 
@@ -26,7 +27,6 @@ def soft_max(Z):
         result[i] = e**Z[i] / sum
     return result
 
-
 Dog = [
     [1.0, 1.0],
     [3.0, 10.0],
@@ -48,13 +48,15 @@ Rabbit = [
     [6.0, 25.0]
 ]
 
+
+
 X_all = Dog + Cat + Rabbit
 
 y_all = [0]*len(Dog) + [1]*len(Cat) + [2]*len(Rabbit)
 
 K = 3
 
-import logistic_regression_matrix as lrm
+import calculus.logistic_regression_matrixDONE as lrm
 
 params = train_one_vs_rest(X_all, y_all, K=3, learning_rate=0.0001, epochs=50000, lrm=lrm)
 
@@ -76,7 +78,6 @@ X_test = [
     [6.5, 26.0],      
 ]
 
-# Run predictions
 for x in X_test:
     p = predict_proba_softmax(x, params, lrm)   # [P(Dog), P(Cat), P(Rabbit)]
     pred = predict_class(x, params, lrm)        # 0, 1, or 2

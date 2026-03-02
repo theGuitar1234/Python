@@ -32,13 +32,6 @@ def dot_product(a, b):
         total += a[i] * b[i]
     return total   
 
-def transpoze(mat):
-    result = [[0 for _ in range(len(mat))] for _ in range(len(mat[0]))]
-    for i in range(len(result)):
-        for j in range(len(result[0])):
-            result[i][j] = mat[j][i]
-    return result
-
 X = [
     [1, 5],
     [2, 10],
