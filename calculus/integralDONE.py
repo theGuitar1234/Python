@@ -1,14 +1,14 @@
 def f(x):
     return x**2
 
-def bajillion_integral(f, a, b, dx):
+def bajillion_integral(f, a, n, dx):
 	area = 0.0
 	for i in range(n):
 		x = a + i * dx         
 		area += f(x) * dx
 	return area
 
-def trapezoid_integral(f, a, b, dx): 
+def trapezoid_integral(f, a, n, dx): 
 	area = 0.0
 	for i in range(n):
 		x0 = a + i * dx
@@ -21,5 +21,5 @@ b = 5
 n = 10**5
 dx = (b - a) / n
 
-print(bajillion_integral(f, a, b, dx))
-print(trapezoid_integral(f, a, b, dx))
+print(bajillion_integral(f, a, n, dx)) #41.33285333440035
+print(trapezoid_integral(f, a, n, dx))

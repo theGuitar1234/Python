@@ -38,7 +38,7 @@ def func(x) :
 #x^2
 
 def func(x):
-    return math.tan(x)**2 / math.log(x)
+    return x**2
 
 current = 10
 prev = None
