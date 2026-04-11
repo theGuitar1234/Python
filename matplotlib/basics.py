@@ -7,3 +7,6 @@ plt.tight_layout()
 plt.xticks(rotation=45)
 plt.yticks(rotation=45)
 plt.show()
+
+import matplotlib
+print(matplotlib.__version__)

@@ -8,4 +8,3 @@ ax.grid(True, alpha=0.3)
 ax.plot([5, 60], [10, 23], marker='o', alpha=0.4)
 
 plt.show()
-

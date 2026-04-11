@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 
-df = pd.read_csv('coinbaseUSD_1-min_data_2014-12-01_to_2019-01-09.csv', delimiter=',')
+df = pd.read_csv('data/coinbaseUSD_1-min_data_2014-12-01_to_2019-01-09.csv', delimiter=',')
 
 
 def visualize(df):
