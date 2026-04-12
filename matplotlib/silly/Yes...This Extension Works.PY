@@ -30,16 +30,18 @@ ax.grid(True, alpha=0.3)
 # x = np.asarray([[random.uniform(-1, 1) for _ in range(5)] for _ in range(5)], dtype=np.float32)
 # ax.imshow(x)
 
-X = np.arange(0, 100, 0.1)
-Y = np.arange(0, 100, 0.2)
-
-[X, Y] = np.meshgrid(X, Y)
+# X = np.arange(random.randint(0, 100), random.randint(100, 200), random.randint(0, 10))
+# Y = np.arange(random.randint(0, 100), random.randint(100, 200), random.randint(0, 10))
 
 # Z = X + Y
-Z = np.cos(X) + np.sin(Y)
-Z = np.cos(X / 5) + np.sin(Y / 5)
+# Z = np.cos(X) + np.sin(Y)
+# Z = np.cos(X / 5) + np.sin(Y / 5)
 
-ax.contour(X, Y, Z)
+X = np.linspace(-5.0, 3.0, 70)
+Y = np.linspace(-5.0, 3.0, 70)
+[X, Y] = np.meshgrid(X, Y)
+Z = X ** 2 + Y ** 2
+ax.contourf(X, Y, Z)
 
 plt.show()
 fig.savefig("img/plot.png")
