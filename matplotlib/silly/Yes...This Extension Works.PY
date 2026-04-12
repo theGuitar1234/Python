@@ -37,11 +37,13 @@ ax.grid(True, alpha=0.3)
 # Z = np.cos(X) + np.sin(Y)
 # Z = np.cos(X / 5) + np.sin(Y / 5)
 
-X = np.linspace(-5.0, 3.0, 70)
-Y = np.linspace(-5.0, 3.0, 70)
-[X, Y] = np.meshgrid(X, Y)
-Z = X ** 2 + Y ** 2
-ax.contourf(X, Y, Z)
+# X = np.linspace(-5.0, 3.0, 70)
+# Y = np.linspace(-5.0, 3.0, 70)
+# [X, Y] = np.meshgrid(X, Y)
+# Z = X ** 2 + Y ** 2
+# ax.contourf(X, Y, Z)
+
+ax.quiver([0, 2, 4], [0, 0, 2], [4, 2, 3], [4, 6, 2])
 
 plt.show()
 fig.savefig("img/plot.png")
