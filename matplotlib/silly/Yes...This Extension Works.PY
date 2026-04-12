@@ -35,7 +35,9 @@ Y = np.arange(0, 100, 0.2)
 
 [X, Y] = np.meshgrid(X, Y)
 
-Z = X + Y
+# Z = X + Y
+Z = np.cos(X) + np.sin(Y)
+Z = np.cos(X / 5) + np.sin(Y / 5)
 
 ax.contour(X, Y, Z)
 
