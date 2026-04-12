@@ -16,13 +16,16 @@ ax.grid(True, alpha=0.3)
 # for i in range(a, b):
 #     ax.scatter(i, math.sin(i*scale))
 
-# x = np.arange(0, 5*np.pi, 0.1)
-# y = np.sin(x)
-# plt.plot(x, y)
+x = np.arange(0, 5*np.pi, 0.1)
+y = np.sin(x)
+plt.plot(x, y)
+ax.fill(x, y)
+# ax.fill_between(x, 10, 50)
 
-categories = ["Farrah", "Fred", "Felicia"]
-levels = [90, 20, 100]
-plt.bar(categories, levels)
+
+# categories = ["Farrah", "Fred", "Felicia"]
+# levels = [90, 20, 100]
+# plt.bar(categories, levels)
 
 plt.show()
 fig.savefig("img/plot.png")
