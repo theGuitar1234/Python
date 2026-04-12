@@ -55,7 +55,10 @@ X, Y = np.meshgrid(x, y)
 Z = X * np.exp(-X**2-Y**2)
 dx, dy = np.gradient(Z)
 
-ax.quiver(X, Y, dx, dy)
+n = -2
+color = np.sqrt(((dx-n)/2)*2 + ((dy-n)/2)*2)
+
+ax.quiver(X, Y, dx, dy, color)
 ax.xaxis.set_ticks([])
 ax.yaxis.set_ticks([])
 ax.set_aspect('equal')
