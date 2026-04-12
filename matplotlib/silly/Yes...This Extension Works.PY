@@ -27,8 +27,17 @@ ax.grid(True, alpha=0.3)
 # levels = [90, 20, 100]
 # plt.bar(categories, levels)
 
-x = np.asarray([[random.uniform(-1, 1) for _ in range(5)] for _ in range(5)], dtype=np.float32)
-ax.imshow(x)
+# x = np.asarray([[random.uniform(-1, 1) for _ in range(5)] for _ in range(5)], dtype=np.float32)
+# ax.imshow(x)
+
+X = np.arange(0, 100, 0.1)
+Y = np.arange(0, 100, 0.2)
+
+[X, Y] = np.meshgrid(X, Y)
+
+Z = X + Y
+
+ax.contour(X, Y, Z)
 
 plt.show()
 fig.savefig("img/plot.png")
