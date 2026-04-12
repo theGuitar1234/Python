@@ -23,7 +23,7 @@ def two():
     plt.plot(x, y1, color="red", linestyle="--")
     plt.plot(x, y2, color="green")
     plt.legend(["C-14", "Ra-226"], loc="upper right")
-    plt.savefig("../plots/img/expnntl_dcy.png")
+    plt.savefig("img/expnntl_dcy.png")
     plt.show()
 
 two()

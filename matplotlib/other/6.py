@@ -24,5 +24,6 @@ def bars():
     plt.bar(categories, level3, bottom=level1+level2, color="#ff8000")
     plt.bar(categories, level4, bottom=level1+level2+level3, color="#ffe5b4")
     plt.legend(["apples", "bananas", "oranges", "peaches"])
+    plt.savefig("../plots/img/brs.png")
     plt.show()
 bars()
