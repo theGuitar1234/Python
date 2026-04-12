@@ -58,7 +58,10 @@ dx, dy = np.gradient(Z)
 n = -2
 color = np.sqrt(((dx-n)/2)*2 + ((dy-n)/2)*2)
 
-ax.quiver(X, Y, dx, dy, color)
+u = np.sin(X)*np.cos(Y)
+v = -np.cos(X)*np.sin(Y)
+
+ax.quiver(X, Y, u, v, color)
 ax.xaxis.set_ticks([])
 ax.yaxis.set_ticks([])
 ax.set_aspect('equal')
