@@ -4,7 +4,7 @@ import math
 import random
 import numpy as np
 
-fig, ax = plt.subplots(figsize=(10, 5))
+fig, ax = plt.subplots(figsize=(14, 8))
 
 fig.set_size_inches(8, 5)
 fig.suptitle("Overall title for the whole figure")
@@ -43,7 +43,18 @@ ax.grid(True, alpha=0.3)
 # Z = X ** 2 + Y ** 2
 # ax.contourf(X, Y, Z)
 
-ax.quiver([0, 2, 4], [0, 0, 2], [4, 2, 3], [4, 6, 2])
+# ax.quiver([0, 2, 4], [0, 0, 2], [4, 2, 3], [4, 6, 2])
+
+x = np.arange(0, 2.2, 0.2)
+y = np.arange(0, 2.2, 0.2)
+X, Y = np.meshgrid(x, y)
+u = np.cos(X) * Y
+v = np.sin(Y) * Y
+ax.quiver(X, Y, u, v)
+ax.xaxis.set_ticks([])
+ax.yaxis.set_ticks([])
+ax.axis([-0.3, 2.3, -0.3, 2.3])
+ax.set_aspect('equal')
 
 plt.show()
 fig.savefig("img/plot.png")
