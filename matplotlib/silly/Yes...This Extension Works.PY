@@ -37,34 +37,35 @@ ax.grid(True, alpha=0.3)
 # Z = np.cos(X) + np.sin(Y)
 # Z = np.cos(X / 5) + np.sin(Y / 5)
 
-# X = np.linspace(-5.0, 3.0, 70)
-# Y = np.linspace(-5.0, 3.0, 70)
-# [X, Y] = np.meshgrid(X, Y)
-# Z = X ** 2 + Y ** 2
-# ax.contourf(X, Y, Z)
+X = np.linspace(-5.0, 3.0, 70)
+Y = np.linspace(-5.0, 3.0, 70)
+[X, Y] = np.meshgrid(X, Y)
+Z = X ** 2 + Y ** 2
+cs = ax.contourf(X, Y, Z)
+# ax.clabel(cs)
 
 # ax.quiver([0, 2, 4], [0, 0, 2], [4, 2, 3], [4, 6, 2])
 
-x = np.arange(-2, 2.2, 0.2)
-y = np.arange(-2, 2.2, 0.2)
-X, Y = np.meshgrid(x, y)
-# u = np.cos(X) * Y
-# v = np.sin(Y) * Y
-# ax.quiver(X, Y, u, v)
+# x = np.arange(-2, 2.2, 0.2)
+# y = np.arange(-2, 2.2, 0.2)
+# X, Y = np.meshgrid(x, y)
+# # u = np.cos(X) * Y
+# # v = np.sin(Y) * Y
+# # ax.quiver(X, Y, u, v)
 
-Z = X * np.exp(-X**2-Y**2)
-dx, dy = np.gradient(Z)
+# Z = X * np.exp(-X**2-Y**2)
+# dx, dy = np.gradient(Z)
 
-n = -2
-color = np.sqrt(((dx-n)/2)*2 + ((dy-n)/2)*2)
+# n = -2
+# color = np.sqrt(((dx-n)/2)*2 + ((dy-n)/2)*2)
 
-u = np.sin(X)*np.cos(Y)
-v = -np.cos(X)*np.sin(Y)
+# u = np.sin(X)*np.cos(Y)
+# v = -np.cos(X)*np.sin(Y)
 
-ax.quiver(X, Y, u, v, color)
-ax.xaxis.set_ticks([])
-ax.yaxis.set_ticks([])
-ax.set_aspect('equal')
+# ax.quiver(X, Y, u, v, color)
+# ax.xaxis.set_ticks([])
+# ax.yaxis.set_ticks([])
+# ax.set_aspect('equal')
 
 plt.show()
 fig.savefig("img/plot.png")
