@@ -170,15 +170,12 @@ class Leaf(Node):
         return f"-> leaf [value={self.value}]"
 
     def get_leaves_below(self):
-        """Return this leaf as a one-item list."""
         return [self]
 
     def update_bounds_below(self):
-        """Leaf: nothing to propagate further."""
         pass
 
     def pred(self, x):
-
         return self.value
 
 
@@ -233,15 +230,12 @@ class Decision_Tree:
         self.predict = predict_func
 
     def pred(self, x):
-
         return self.root.pred(x)
 
     def np_extrema(self, arr):
-
         return np.min(arr), np.max(arr)
 
     def random_split_criterion(self, node):
-
         diff = 0
         while diff == 0:
             feature = self.rng.integers(0, self.explanatory.shape[1])
