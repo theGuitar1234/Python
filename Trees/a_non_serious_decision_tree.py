@@ -62,16 +62,16 @@ class ANonSeriousDecisionTree:
             raise ValueError(
                 f"X and y must match in shapes : {X.shape[0]} != {y.shape[0]}"
             )
+        self.X_train_ = X
+        self.y_train_ = y
         self.root = self._build_tree(X, y, depth=0)
-
         return self
 
     def _build_tree(self, X, y, depth):
         node = Node()
-        majority_class = self._majority_class(y)
-        node.majority_class = majority_class
+        node.majority_class = self._majority_class(y)
         node.number_of_samples = len(y)
-        node.leaf_error = len(y) - np.sum(y == majority_class)  
+        node.leaf_error = self._leaf_error(y) 
 
         if (
             depth >= self.max_depth
@@ -212,6 +212,107 @@ class ANonSeriousDecisionTree:
     def prune_pessimistic(self):
         self._prune_node_pessimistic(self.root)
         return self
+    
+    def prune_error_based(self, confidence_factor=0.25, subtree_raising=True):
+        self._prune_error_based_node(
+            self.root,
+            self.X_train_,
+            self.y_train_,
+            confidence_factor,
+            subtree_raising,
+        )
+        return self
+
+    def _prune_error_based_node(self, node, X_node, y_node, confidence_factor, subtree_raising):
+        if node is None or node.is_leaf or node.value is not None:
+            return
+        X_left, y_left, X_right, y_right = self._route_node_data(node, X_node, y_node)
+        
+        self._prune_error_based_node(node.left, X_left, y_left, confidence_factor, subtree_raising)
+        self._prune_error_based_node(node.right, X_right, y_right, confidence_factor, subtree_raising)
+        
+        N = len(y_node)
+        tree_errors = self._count_errors(node, X_node, y_node)
+        tree_estimate = N * self.ucf(tree_errors, N, confidence_factor)
+        majority, leaf_errors = self._leaf_error(y_node)
+        leaf_estimate = N * self.ucf(leaf_errors, N, confidence_factor)
+        
+        raised_estimate = float("inf")
+        raised_subtree = None
+        
+        if subtree_raising and node.left is not None and node.right is not None:
+            if len(y_left) >= len(y_right):
+                raised_subtree = node.left
+            else:
+                raised_subtree = node.right
+            raised_errors = self._count_errors(raised_subtree, X_node, y_node)
+            raised_estimate = N * self.ucf(raised_errors, N, confidence_factor)
+        
+        if leaf_estimate <= tree_estimate and leaf_estimate <= raised_estimate:
+            node.is_leaf = True
+            node.value = majority
+            node.majority_class = majority
+            node.left = None
+            node.right = None
+            node.feature = None
+            node.threshold = None
+            node.number_of_leaves = 1
+        elif raised_estimate < tree_estimate and raised_estimate < leaf_estimate:
+            node.feature = raised_subtree.feature
+            node.threshold = raised_subtree.threshold
+            node.left = raised_subtree.left
+            node.right = raised_subtree.right
+            node.value = raised_subtree.value
+            node.is_leaf = raised_subtree.is_leaf
+            
+            node.majority_class, node.leaf_error =  self._leaf_error(y_node)
+            node.number_of_samples = len(y_node)
+        else:
+            pass
+
+    def _route_node_data(self, node, X, y):
+        if self.categorical:
+            left_mask = X[:, node.featre] == node.threshold
+            right_mask = X[:, node.feature] != node.threshold
+        else:
+            left_mask = X[:, node.feature] > node.threshold
+            right_mask = X[:, node.feature] <= node.threshold
+        return X[left_mask], y[left_mask], X[right_mask], y[right_mask]
+    
+    def _count_errors(self, node, X, y):
+        predictions = np.array([self.predict_one(x, node) for x in X])
+        return np.sum(predictions != y)
+    
+    def _leaf_error(self, y):
+        majority = self._majority_class(y)
+        errors = np.sum(y != majority)
+        return majority, errors
+    
+    def ucf(self, errors, total, confidence_factor=0.25):
+        if total == 0:
+            return 0.0
+        if errors == 0:
+            return 1.0 - confidence_factor ** (1.0 / total)
+        if errors == total:
+            return 1.0
+        
+        low = errors / total
+        high = 1.0
+        
+        while high - low > 1e-12:
+            mid = (low + high) / 2
+            probability = self.binomial_cdf(errors, total, mid)
+            if probability > confidence_factor:
+                low = mid
+            else:
+                high = mid
+        return high
+    
+    def binomial_cdf(self, errors, total, p):
+        return sum(
+            math.comb(total, i) * (p ** i) * ((1 - p) ** (total - i))
+            for i in range(errors + 1)
+        )
     
     def _prune_node(self, node):
         node.is_leaf = True
@@ -499,7 +600,7 @@ if __name__ == "__main__":
     print(f"\nFinal Test Accuracy: {final_test_accuracy}%")
 
     print("\nPruning the tree...")
-    final_tree.prune_pessimistic()
+    final_tree.prune_error_based()
 
     print(
         "After pruning Validation Accuracy:",
