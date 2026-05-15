@@ -1,12 +1,15 @@
 from enum import Enum
 
-import numpy as np
-import sys
-import os
 from sklearn.model_selection import train_test_split
 from sklearn import datasets
 from sklearn.metrics import confusion_matrix
 from sklearn.model_selection import StratifiedKFold
+from sklearn.tree import plot_tree
+import matplotlib.pyplot as plt
+
+import numpy as np
+import sys
+import os
 import numpy as np
 import copy
 import math
@@ -26,6 +29,66 @@ class Node:
         self.number_of_leaves = None
         self.leaf_error = None
         self.subtree_error = None
+        self.is_root = False
+        self.depth = None
+        self.max_depth = float("inf")
+        self.max_depth_reached = "MAX_DEPTH_REACHED"
+
+    def left_add_prefix(self, text):
+        if self.depth > self.max_depth:
+            return self.max_depth_reached
+        lines = text.split("\n")
+        new_text = "    +--" + lines[0] + "\n"
+        for x in lines[1:]:
+            new_text += ("    |  " + x) + "\n"
+        return new_text
+
+    def right_add_prefix(self, text):
+        if self.depth > self.max_depth:
+            return self.max_depth_reached
+
+        lines = text.split("\n")
+        new_text = "    +--" + lines[0] + "\n"
+        for x in lines[1:]:
+            new_text += ("       " + x) + "\n"
+        return new_text
+
+    def __str__(self):
+        if self.depth > self.max_depth:
+            return self.max_depth_reached
+
+        if self.is_root:
+            text = f"root [feature={self.feature}, " f"threshold={self.threshold}]"
+        else:
+            text = f"-> node [feature={self.feature}, " f"threshold={self.threshold}]"
+
+        if self.left is not None:
+            text += "\n" + self.left_add_prefix(str(self.left).rstrip("\n"))
+
+        if self.right is not None:
+            if self.left is None:
+                text += "\n"
+            text += self.right_add_prefix(str(self.right).rstrip("\n"))
+
+        return text
+
+    def max_depth_below(self):
+        max_depth = self.depth
+
+        if self.left is not None:
+            max_depth = max(max_depth, self.left.max_depth_below())
+        if self.right is not None:
+            max_depth = max(max_depth, self.right.max_depth_below())
+        return max_depth
+
+    def count_nodes_below(self, only_leaves=False):
+        count = 0 if only_leaves else 1
+
+        if self.left is not None:
+            count += self.left.count_nodes_below(only_leaves=only_leaves)
+        if self.right is not None:
+            count += self.right.count_nodes_below(only_leaves=only_leaves)
+        return count
 
 
 class ANonSeriousDecisionTree:
@@ -34,12 +97,17 @@ class ANonSeriousDecisionTree:
         GINI = 1
         ENTROPY = 2
 
+    class MinimumError(Enum):
+        M_PROBABILITY = 1
+        MINIMUM_ERROR_ESTIMATE = 2
+
     def __init__(
         self,
         minimum_population_size=2,
         minimum_split_size=1,
         minimum_gain=0.001,
         max_depth=3,
+        str_max_depth=float("inf"),
         categorical=False,
         adjacent=False,
         log=False,
@@ -54,8 +122,17 @@ class ANonSeriousDecisionTree:
         self.minimum_gain = minimum_gain
         self.information_gain = information_gain
         self.log = log
+        self.is_root_set = False
+        self.str_max_depth = str_max_depth
+        self.feature_importance = {}
 
-    def fit(self, X, y):
+    def depth(self):
+        return self.root.max_depth_below()
+
+    def count_nodes(self, only_leaves=False):
+        return self.root.count_nodes_below(only_leaves=only_leaves)
+
+    def fit(self, X, y, verbose=False):
         if y.ndim == 2:
             y = np.argmax(y, axis=1)
         if X.shape[0] != y.shape[0]:
@@ -64,14 +141,50 @@ class ANonSeriousDecisionTree:
             )
         self.X_train_ = X
         self.y_train_ = y
+        self.classes_, class_counts = np.unique(y, return_counts=True)
+        self.class_priors_ = class_counts / len(y)
+
         self.root = self._build_tree(X, y, depth=0)
+
+        if verbose:
+            number_of_leaves = self.count_nodes(only_leaves=True)
+            _, accuracy = self.evaluate_dataset(self.X_train_, self.y_train_)
+            print(f"""\nTraining finished.
+    - Depth                     : {self.depth()}
+    - Number of nodes           : {self.count_nodes()}
+    - Number of leaves          : {number_of_leaves}
+    - Accuracy on training data : {accuracy}""")
+
+            print("\nFeature Importances :")
+            total = sum(self.feature_importance.values())
+            for key, value in self.feature_importance.items():
+                print(f"For feature{key}, importance is {(value/total) * 100}%")
+            
+            features = self.feature_importance.keys()
+            values = [(v/total) * 100 for v in self.feature_importance.values()]
+            plt.figure("Feature Importances")
+            plt.xlabel("Features")
+            plt.ylabel("Values")
+            plt.barh(features, values)
+            
+            os.makedirs("img", exist_ok=True)
+
+            plt.savefig("img/ftr_mprtncs.png")
+            plt.show()
+            
         return self
 
     def _build_tree(self, X, y, depth):
         node = Node()
+        if not self.is_root_set:
+            node.is_root = True
+            self.is_root_set = True
+        node.depth = depth
+        node.max_depth = self.str_max_depth
         node.majority_class = self._majority_class(y)
         node.number_of_samples = len(y)
-        node.leaf_error = self._leaf_error(y) 
+        node.leaf_error, node.leaf_error = self._leaf_error(y)
+        node.number_of_classes = self._class_counts(y)
 
         if (
             depth >= self.max_depth
@@ -208,11 +321,38 @@ class ANonSeriousDecisionTree:
         self.root = best_tree.root
 
         return self
-    
+
     def prune_pessimistic(self):
         self._prune_node_pessimistic(self.root)
         return self
-    
+
+    def _prune_node_pessimistic(self, node):
+        if node is None:
+            return
+        if node.value is not None:
+            self._prune_node(node)
+            return
+
+        self._prune_node_pessimistic(node.left)
+        self._prune_node_pessimistic(node.right)
+
+        node.number_of_leaves = node.left.number_of_leaves + node.right.number_of_leaves
+        node.subtree_error = node.left.subtree_error + node.right.subtree_error
+
+        leaf_pessimistic_error = node.leaf_error + 0.5
+        subtree_pessimistic_error = node.subtree_error + 0.5 + node.number_of_leaves
+
+        standart_error = math.sqrt(
+            (
+                subtree_pessimistic_error
+                * (node.number_of_samples - subtree_pessimistic_error)
+            )
+            / node.number_of_samples
+        )
+
+        if leaf_pessimistic_error <= subtree_pessimistic_error + standart_error:
+            self._prune_node(node)
+
     def prune_error_based(self, confidence_factor=0.25, subtree_raising=True):
         self._prune_error_based_node(
             self.root,
@@ -223,23 +363,29 @@ class ANonSeriousDecisionTree:
         )
         return self
 
-    def _prune_error_based_node(self, node, X_node, y_node, confidence_factor, subtree_raising):
+    def _prune_error_based_node(
+        self, node, X_node, y_node, confidence_factor, subtree_raising
+    ):
         if node is None or node.is_leaf or node.value is not None:
             return
         X_left, y_left, X_right, y_right = self._route_node_data(node, X_node, y_node)
-        
-        self._prune_error_based_node(node.left, X_left, y_left, confidence_factor, subtree_raising)
-        self._prune_error_based_node(node.right, X_right, y_right, confidence_factor, subtree_raising)
-        
+
+        self._prune_error_based_node(
+            node.left, X_left, y_left, confidence_factor, subtree_raising
+        )
+        self._prune_error_based_node(
+            node.right, X_right, y_right, confidence_factor, subtree_raising
+        )
+
         N = len(y_node)
         tree_errors = self._count_errors(node, X_node, y_node)
         tree_estimate = N * self.ucf(tree_errors, N, confidence_factor)
         majority, leaf_errors = self._leaf_error(y_node)
         leaf_estimate = N * self.ucf(leaf_errors, N, confidence_factor)
-        
+
         raised_estimate = float("inf")
         raised_subtree = None
-        
+
         if subtree_raising and node.left is not None and node.right is not None:
             if len(y_left) >= len(y_right):
                 raised_subtree = node.left
@@ -247,16 +393,9 @@ class ANonSeriousDecisionTree:
                 raised_subtree = node.right
             raised_errors = self._count_errors(raised_subtree, X_node, y_node)
             raised_estimate = N * self.ucf(raised_errors, N, confidence_factor)
-        
+
         if leaf_estimate <= tree_estimate and leaf_estimate <= raised_estimate:
-            node.is_leaf = True
-            node.value = majority
-            node.majority_class = majority
-            node.left = None
-            node.right = None
-            node.feature = None
-            node.threshold = None
-            node.number_of_leaves = 1
+            self._prune_node(node)
         elif raised_estimate < tree_estimate and raised_estimate < leaf_estimate:
             node.feature = raised_subtree.feature
             node.threshold = raised_subtree.threshold
@@ -264,8 +403,8 @@ class ANonSeriousDecisionTree:
             node.right = raised_subtree.right
             node.value = raised_subtree.value
             node.is_leaf = raised_subtree.is_leaf
-            
-            node.majority_class, node.leaf_error =  self._leaf_error(y_node)
+
+            node.majority_class, node.leaf_error = self._leaf_error(y_node)
             node.number_of_samples = len(y_node)
         else:
             pass
@@ -278,16 +417,16 @@ class ANonSeriousDecisionTree:
             left_mask = X[:, node.feature] > node.threshold
             right_mask = X[:, node.feature] <= node.threshold
         return X[left_mask], y[left_mask], X[right_mask], y[right_mask]
-    
+
     def _count_errors(self, node, X, y):
         predictions = np.array([self.predict_one(x, node) for x in X])
         return np.sum(predictions != y)
-    
+
     def _leaf_error(self, y):
         majority = self._majority_class(y)
         errors = np.sum(y != majority)
         return majority, errors
-    
+
     def ucf(self, errors, total, confidence_factor=0.25):
         if total == 0:
             return 0.0
@@ -295,10 +434,10 @@ class ANonSeriousDecisionTree:
             return 1.0 - confidence_factor ** (1.0 / total)
         if errors == total:
             return 1.0
-        
+
         low = errors / total
         high = 1.0
-        
+
         while high - low > 1e-12:
             mid = (low + high) / 2
             probability = self.binomial_cdf(errors, total, mid)
@@ -307,13 +446,73 @@ class ANonSeriousDecisionTree:
             else:
                 high = mid
         return high
-    
+
     def binomial_cdf(self, errors, total, p):
         return sum(
-            math.comb(total, i) * (p ** i) * ((1 - p) ** (total - i))
+            math.comb(total, i) * (p**i) * ((1 - p) ** (total - i))
             for i in range(errors + 1)
         )
-    
+
+    def prune_minimum_error(self):
+        self._prune_minimum_error(self.root)
+        return self
+
+    def _prune_minimum_error(self, node):
+        if node is None:
+            return 0
+
+        static_error = self._static_error(node)
+
+        if node.is_leaf:
+            node.expected_error = static_error
+            return node.expected_error
+        left_error = self._prune_minimum_error(node.left)
+        right_error = self._prune_minimum_error(node.right)
+
+        dynamic_error = (
+            node.left.number_of_samples / node.number_of_samples
+        ) * left_error + (
+            node.right.number_of_samples / node.number_of_samples
+        ) * right_error
+
+        if static_error <= dynamic_error:
+            self._prune_node(node)
+            node.expected_error = static_error
+        else:
+            node.expected_error = dynamic_error
+
+        return node.expected_error
+
+    def _static_error(
+        self, node, m=3, minimum_error=MinimumError.MINIMUM_ERROR_ESTIMATE
+    ):
+        error_estimate = 0.0
+        N = node.number_of_samples
+
+        match (minimum_error):
+            case self.MinimumError.M_PROBABILITY:
+                priors = self.class_priors_
+                number_of_classes = node.number_of_classes
+                smoothed_probabilities = (number_of_classes + m * priors) / (N + m)
+                error_estimate = 1 - max(smoothed_probabilities)
+            case self.MinimumError.MINIMUM_ERROR_ESTIMATE:
+                number_of_classes = len(self.y_train_)
+                number_of_majority_class = np.sum(self.y_train_ == node.majority_class)
+                error_estimate = (
+                    N - number_of_majority_class + number_of_classes - 1
+                ) / (N + number_of_classes)
+            case _:
+                raise ValueError(
+                    f"Unsupported {self.MinimumError.name}, supported values are {list(self.MinimumError)}"
+                )
+        return error_estimate
+
+    def _class_counts(self, y):
+        counts = np.zeros(len(self.classes_))
+        for i, cls in enumerate(self.classes_):
+            counts[i] = np.sum(y == cls)
+        return counts
+
     def _prune_node(self, node):
         node.is_leaf = True
         node.number_of_leaves = 1
@@ -323,29 +522,6 @@ class ANonSeriousDecisionTree:
         node.feature = None
         node.threshold = None
         node.value = node.majority_class
-
-    def _prune_node_pessimistic(self, node):
-        if node is None:
-            return
-        if node.value is not None:
-            self._prune_node(node)
-            return
-        
-        self._prune_node_pessimistic(node.left)
-        self._prune_node_pessimistic(node.right)
-        
-        node.number_of_leaves = node.left.number_of_leaves + node.right.number_of_leaves
-        node.subtree_error = node.left.subtree_error + node.right.subtree_error
-        
-        leaf_pessimistic_error = node.leaf_error + 0.5
-        subtree_pessimistic_error = node.subtree_error + 0.5 + node.number_of_leaves
-        
-        standart_error = math.sqrt(
-            (subtree_pessimistic_error * (node.number_of_samples - subtree_pessimistic_error)) / node.number_of_samples
-        )
-        
-        if leaf_pessimistic_error <= subtree_pessimistic_error + standart_error:
-            self._prune_node(node)
 
     def _choose_split(self, X, y):
         best_feature = None
@@ -393,12 +569,12 @@ class ANonSeriousDecisionTree:
                             f"Unsupported Information Gain, supported values are {list(self.InformationGain)}"
                         )
 
-                weighted_gain = self.weighted_gain(
+                _weighted_gain = self.weighted_gain(
                     __left, __right, len(left_group), len(right_group)
                 )
 
-                if weighted_gain < best_gain:
-                    best_gain = weighted_gain
+                if _weighted_gain < best_gain:
+                    best_gain = _weighted_gain
                     best_feature = feature
                     best_threshold = category
 
@@ -417,6 +593,11 @@ class ANonSeriousDecisionTree:
 
         if __parent_impurity - best_gain < self.minimum_gain:
             return None, None
+        
+        impurity_decrease = __parent_impurity - best_gain
+
+        self.feature_importance[best_feature] = self.feature_importance.get(best_feature, 0) + len(y) * impurity_decrease
+
         return best_feature, best_threshold
 
     def gini(self, y):
@@ -437,7 +618,7 @@ class ANonSeriousDecisionTree:
         total_size = left_size + right_size
         return (left_size / total_size) * left + (right_size / total_size) * right
 
-    def predict_one(self, x, node=None):
+    def predict_one(self, x, node=None, verbose=False):
         if node is None:
             node = self.root
 
@@ -470,6 +651,46 @@ class ANonSeriousDecisionTree:
         accuracy = np.mean(predictions == y) * 100.0
 
         return predictions, accuracy
+
+    def visualize_tree(self, feature1, feature2, cmap=plt.cm.Set1):
+        os.makedirs("img", exist_ok=True)
+
+        X_train = self.X_train_[:, [feature1, feature2]]
+        y_train = self.y_train_
+
+        x_min, x_max = X_train[:, 0].min(), X_train[:, 0].max()
+        y_min, y_max = X_train[:, 1].min(), X_train[:, 1].max()
+
+        X = np.linspace(x_min, x_max, 100)
+        Y = np.linspace(y_min, y_max, 100)
+        XX, YY = np.meshgrid(X, Y)
+
+        baseline = self.X_train_.mean(axis=0)
+        grid_points = np.tile(baseline, (XX.ravel().shape[0], 1))
+
+        # grid_points = np.c_[XX.ravel(), YY.ravel()]
+        grid_points[:, feature1] = XX.ravel()
+        grid_points[:, feature2] = YY.ravel()
+
+        Z = self.predict(grid_points).reshape(XX.shape)
+
+        plt.title("Scatter Plot of features and true labels")
+        plt.scatter(
+            X_train[:, 0], X_train[:, 1], c=y_train, cmap=cmap, edgecolors="black"
+        )
+        plt.savefig("img/scatter.png")
+        plt.show()
+
+        plt.title("Contour plot of the splits")
+        levels = np.arange(len(self.classes_) + 1) - 0.5
+        plt.contourf(XX, YY, Z, levels=levels, alpha=0.3, cmap=cmap)
+        plt.savefig("img/contour.png")
+        plt.show()
+
+        plt.title("Spliting of the instance Space")
+        plt.pcolormesh(XX, YY, Z, cmap=cmap, shading="auto")
+        plt.savefig("img/bassins.png")
+        plt.show()
 
     @classmethod
     def generate_config(cls, max_depth, max_gain=None):
@@ -546,7 +767,17 @@ class ANonSeriousDecisionTree:
         return np.mean(scores)
 
     @classmethod
-    def choose_best_cross_validation(cls, X_train_val, y_train_val, config, splits=5):
+    def choose_best_cross_validation(
+        cls,
+        X_train_val,
+        y_train_val,
+        config,
+        splits=5,
+        categorical=False,
+        adjacent=True,
+        log=False,
+        verbose=False,
+    ):
         best_config = None
         best_cv_score = -1
         for config in configs:
@@ -557,24 +788,65 @@ class ANonSeriousDecisionTree:
             if cv_score > best_cv_score:
                 best_cv_score = cv_score
                 best_config = config
-        print("\nBest config:", best_config)
-        print("Best CV score:", best_cv_score)
+
+        print(f"\nBest config: {best_config}\n")
+        print(f"\nBest CV score: {best_cv_score}\n")
+
         final_tree = ANonSeriousDecisionTree(
             minimum_population_size=2,
             minimum_split_size=1,
             minimum_gain=best_config["minimum_gain"],
             max_depth=best_config["max_depth"],
-            categorical=False,
-            adjacent=True,
+            str_max_depth=float("inf"),
+            categorical=categorical,
+            adjacent=adjacent,
+            log=log,
             information_gain=best_config["information_gain"],
         )
-        final_tree.fit(X_train_val, y_train_val)
+        final_tree.fit(X_train_val, y_train_val, verbose=verbose)
         return final_tree
+
+    @staticmethod
+    def circle_of_clouds(
+        n_clouds, n_objects_by_cloud, radius=1, sigma=None, seed=0, angle=0
+    ):
+        rng = np.random.default_rng(seed)
+        if not sigma:
+            sigma = np.sqrt(2 - 2 * np.cos(2 * np.pi / n_clouds)) / 7
+
+        def rotate(x, k):
+            theta = 2 * k * np.pi / n_clouds + angle
+            m = np.matrix(
+                [[np.cos(theta), np.sin(theta)], [-np.sin(theta), np.cos(theta)]]
+            )
+            return np.matmul(x, m)
+
+        def cloud():
+            return (rng.normal(size=2 * n_objects_by_cloud) * sigma).reshape(
+                n_objects_by_cloud, 2
+            ) + np.array([radius, 0])
+
+        def target():
+            return np.array(
+                ([[i] * n_objects_by_cloud for i in range(n_clouds)]), dtype="int32"
+            ).ravel()
+
+        return (
+            np.concatenate(
+                [np.array(rotate(cloud(), k)) for k in range(n_clouds)], axis=0
+            ),
+            target(),
+        )
 
 
 if __name__ == "__main__":
 
-    dataset = datasets.load_wine()
+    dataset = datasets.load_iris()
+    # X, y = ANonSeriousDecisionTree.circle_of_clouds(20, 50)
+    feature1 = 0
+    feature2 = 1
+
+    # X = dataset.data[:, [feature_x, feature_y]]
     X = dataset.data
     y = dataset.target
 
@@ -593,27 +865,25 @@ if __name__ == "__main__":
     configs = ANonSeriousDecisionTree.generate_config(max_depth=10)
 
     final_tree = ANonSeriousDecisionTree.choose_best_cross_validation(
-        X_train_val, y_train_val, configs
+        X_train_val, y_train_val, configs, log=True, verbose=True
     )
     _, final_test_accuracy = final_tree.evaluate_dataset(X_test, y_test)
 
     print(f"\nFinal Test Accuracy: {final_test_accuracy}%")
 
     print("\nPruning the tree...")
-    final_tree.prune_error_based()
+    # final_tree.prune_minimum_error()
 
     print(
         "After pruning Validation Accuracy:",
         final_tree.evaluate_dataset(X_val, y_val)[1],
     )
-    print("Final test accuracy:", final_tree.evaluate_dataset(X_test, y_test)[1])
+    print(
+        "Final test accuracy:",
+        final_tree.evaluate_dataset(X_test, y_test)[1],
+    )
 
-    # best_val_accuracy, best_tree, best_config = ANonSeriousDecisionTree.validate_tree(
-    #     configs
-    # )
+    tree_str = str(final_tree.root)
+    print(f"\n{tree_str}")
 
-    # print("\nBest config:", best_config)
-    # print("Best validation accuracy:", best_val_accuracy)
-
-    # _, test_accuracy = best_tree.evaluate_dataset(X_test, y_test)
-    # print(f"\nTest Accuracy: {test_accuracy}")
+    final_tree.visualize_tree(feature1, feature2)

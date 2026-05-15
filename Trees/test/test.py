@@ -116,4 +116,12 @@ if __name__ == "__main__":
     # ]
     # y = [0, 0, 0, 1, 1, 1, 0, 0, 0, 0]
 
+    # best_val_accuracy, best_tree, best_config = ANonSeriousDecisionTree.validate_tree(
+    #     configs
+    # )
 
+    # print("\nBest config:", best_config)
+    # print("Best validation accuracy:", best_val_accuracy)
+
+    # _, test_accuracy = best_tree.evaluate_dataset(X_test, y_test)
+    # print(f"\nTest Accuracy: {test_accuracy}")
