@@ -125,6 +125,7 @@ class ANonSeriousDecisionTree:
         self.is_root_set = False
         self.str_max_depth = str_max_depth
         self.feature_importance = {}
+        self.max_depth_reached = "MAX_DEPTH_REACHED"
 
     def depth(self):
         return self.root.max_depth_below()
@@ -227,6 +228,102 @@ class ANonSeriousDecisionTree:
         node.right = self._build_tree(X[right_mask], y[right_mask], depth + 1)
 
         return node
+    
+    def _choose_split(self, X, y):
+        best_feature = None
+        best_threshold = None
+        best_gain = float("inf")
+
+        _, features = X.shape
+        for feature in range(features):
+            values = X[:, feature]
+            order = np.argsort(values)
+            sorted_values = values[order]
+            categories = np.unique(sorted_values)
+
+            if not self.categorical:
+                if self.adjacent:
+                    sorted_y = y[order]
+                    mask = sorted_y[1:] != sorted_y[:-1]
+                    mask &= sorted_values[1:] != sorted_values[:-1]
+                    categories = (
+                        sorted_values[1:][mask] + sorted_values[:-1][mask]
+                    ) / 2
+                else:
+                    categories = (categories[1:] + categories[:-1]) / 2
+            for category in categories:
+                if self.categorical:
+                    left_mask = values == category
+                    right_mask = values != category
+                else:
+                    left_mask = values > category
+                    right_mask = values <= category
+                if np.sum(left_mask) == 0 or np.sum(right_mask) == 0:
+                    continue
+                left_group = y[left_mask]
+                right_group = y[right_mask]
+
+                match self.information_gain:
+                    case self.InformationGain.GINI:
+                        __left = self.gini(left_group)
+                        __right = self.gini(right_group)
+                    case self.InformationGain.ENTROPY:
+                        __left = self.entropy(left_group)
+                        __right = self.entropy(right_group)
+                    case _:
+                        raise ValueError(
+                            f"Unsupported Information Gain, supported values are {list(self.InformationGain)}"
+                        )
+
+                _weighted_gain = self.weighted_gain(
+                    __left, __right, len(left_group), len(right_group)
+                )
+
+                if _weighted_gain < best_gain:
+                    best_gain = _weighted_gain
+                    best_feature = feature
+                    best_threshold = category
+
+        if best_feature is None:
+            return None, None
+
+        match self.information_gain:
+            case self.InformationGain.GINI:
+                __parent_impurity = self.gini(y)
+            case self.InformationGain.ENTROPY:
+                __parent_impurity = self.entropy(y)
+            case _:
+                raise ValueError(
+                    f"Unsupported Information Gain, supported values are {list(self.InfomrationGain)}"
+                )
+
+        if __parent_impurity - best_gain < self.minimum_gain:
+            return None, None
+        
+        impurity_decrease = __parent_impurity - best_gain
+
+        self.feature_importance[best_feature] = self.feature_importance.get(best_feature, 0) + len(y) * impurity_decrease
+
+        return best_feature, best_threshold
+
+    def gini(self, y):
+        if len(y) == 0:
+            return 0
+        _, counts = np.unique(y, return_counts=True)
+        proportions = counts / len(y)
+        return 1 - np.sum(proportions**2)
+
+    def entropy(self, y):
+        if len(y) == 0:
+            return 0
+        _, counts = np.unique(y, return_counts=True)
+        proportions = counts / len(y)
+        return -np.sum(proportions * np.log2(proportions))
+
+    def weighted_gain(self, left, right, left_size, right_size):
+        total_size = left_size + right_size
+        return (left_size / total_size) * left + (right_size / total_size) * right
+
 
     def calculate_error(self, node):
         if node is None:
@@ -411,7 +508,7 @@ class ANonSeriousDecisionTree:
 
     def _route_node_data(self, node, X, y):
         if self.categorical:
-            left_mask = X[:, node.featre] == node.threshold
+            left_mask = X[:, node.feature] == node.threshold
             right_mask = X[:, node.feature] != node.threshold
         else:
             left_mask = X[:, node.feature] > node.threshold
@@ -523,101 +620,6 @@ class ANonSeriousDecisionTree:
         node.threshold = None
         node.value = node.majority_class
 
-    def _choose_split(self, X, y):
-        best_feature = None
-        best_threshold = None
-        best_gain = float("inf")
-
-        _, features = X.shape
-        for feature in range(features):
-            values = X[:, feature]
-            order = np.argsort(values)
-            sorted_values = values[order]
-            categories = np.unique(sorted_values)
-
-            if not self.categorical:
-                if self.adjacent:
-                    sorted_y = y[order]
-                    mask = sorted_y[1:] != sorted_y[:-1]
-                    mask &= sorted_values[1:] != sorted_values[:-1]
-                    categories = (
-                        sorted_values[1:][mask] + sorted_values[:-1][mask]
-                    ) / 2
-                else:
-                    categories = (categories[1:] + categories[:-1]) / 2
-            for category in categories:
-                if self.categorical:
-                    left_mask = values == category
-                    right_mask = values != category
-                else:
-                    left_mask = values > category
-                    right_mask = values <= category
-                if np.sum(left_mask) == 0 or np.sum(right_mask) == 0:
-                    continue
-                left_group = y[left_mask]
-                right_group = y[right_mask]
-
-                match self.information_gain:
-                    case self.InformationGain.GINI:
-                        __left = self.gini(left_group)
-                        __right = self.gini(right_group)
-                    case self.InformationGain.ENTROPY:
-                        __left = self.entropy(left_group)
-                        __right = self.entropy(right_group)
-                    case _:
-                        raise ValueError(
-                            f"Unsupported Information Gain, supported values are {list(self.InformationGain)}"
-                        )
-
-                _weighted_gain = self.weighted_gain(
-                    __left, __right, len(left_group), len(right_group)
-                )
-
-                if _weighted_gain < best_gain:
-                    best_gain = _weighted_gain
-                    best_feature = feature
-                    best_threshold = category
-
-        if best_feature is None:
-            return None, None
-
-        match self.information_gain:
-            case self.InformationGain.GINI:
-                __parent_impurity = self.gini(y)
-            case self.InformationGain.ENTROPY:
-                __parent_impurity = self.entropy(y)
-            case _:
-                raise ValueError(
-                    f"Unsupported Information Gain, supported values are {list(self.InfomrationGain)}"
-                )
-
-        if __parent_impurity - best_gain < self.minimum_gain:
-            return None, None
-        
-        impurity_decrease = __parent_impurity - best_gain
-
-        self.feature_importance[best_feature] = self.feature_importance.get(best_feature, 0) + len(y) * impurity_decrease
-
-        return best_feature, best_threshold
-
-    def gini(self, y):
-        if len(y) == 0:
-            return 0
-        _, counts = np.unique(y, return_counts=True)
-        proportions = counts / len(y)
-        return 1 - np.sum(proportions**2)
-
-    def entropy(self, y):
-        if len(y) == 0:
-            return 0
-        _, counts = np.unique(y, return_counts=True)
-        proportions = counts / len(y)
-        return -np.sum(proportions * np.log2(proportions))
-
-    def weighted_gain(self, left, right, left_size, right_size):
-        total_size = left_size + right_size
-        return (left_size / total_size) * left + (right_size / total_size) * right
-
     def predict_one(self, x, node=None, verbose=False):
         if node is None:
             node = self.root
@@ -691,7 +693,36 @@ class ANonSeriousDecisionTree:
         plt.pcolormesh(XX, YY, Z, cmap=cmap, shading="auto")
         plt.savefig("img/bassins.png")
         plt.show()
+    
+    def export_text(self, node, feature_names=None, class_names=None, text=""):
+        if node.depth > node.max_depth:
+            return node.max_depth_reached
 
+        if node.is_root:
+            text += "root"
+        
+        padding = "    " + "|   "*node.depth
+
+        if node.is_leaf or node.value is not None:
+            root_str = "root" if node.is_root else ""
+            if class_names is not None:
+                return f"{root_str}\n{padding}+---> class: {class_names[node.majority_class]}"
+            else:
+                return f"{root_str}\n{padding}+---> class: {node.majority_class}"
+        else:
+            feature_name = feature_names[node.feature] if feature_names is not None else node.feature
+            if self.categorical:
+                text += f"\n{padding}+---> {feature_name} == {node.threshold}"
+                text += self.export_text(node.left, feature_names, class_names)
+                text += f"\n{padding}+---> {feature_name} != {node.threshold}"
+                text += self.export_text(node.right, feature_names, class_names)
+            else:
+                text += f"\n{padding}+---> {feature_name} > {node.threshold}"
+                text += self.export_text(node.left, feature_names, class_names)
+                text += f"\n{padding}+---> {feature_name} <= {node.threshold}"
+                text += self.export_text(node.right, feature_names, class_names)
+        return text
+    
     @classmethod
     def generate_config(cls, max_depth, max_gain=None):
         configs = []
@@ -871,7 +902,7 @@ if __name__ == "__main__":
 
     print(f"\nFinal Test Accuracy: {final_test_accuracy}%")
 
-    print("\nPruning the tree...")
+    # print("\nPruning the tree...")
     # final_tree.prune_minimum_error()
 
     print(
@@ -886,4 +917,8 @@ if __name__ == "__main__":
     tree_str = str(final_tree.root)
     print(f"\n{tree_str}")
 
-    final_tree.visualize_tree(feature1, feature2)
+    tree_vis = final_tree.export_text(final_tree.root, feature_names=dataset.feature_names, class_names=dict(zip(np.unique(dataset.target), dataset.target_names)))
+    print(f"\n{tree_vis}")
+
+    # final_tree.visualize_tree(feature1, feature2)
+    
